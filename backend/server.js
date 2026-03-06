@@ -7,7 +7,16 @@ const path = require("path");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'https://gangrill-menu.vercel.app',
+        /\.vercel\.app$/   // Allow any Vercel preview deployment
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true
+}));
 
 // Serve static files from uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -35,7 +44,9 @@ app.use('/api/admin/menu', authMiddleware, adminMenuRoutes);           // Protec
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect('mongodb://127.0.0.1:27017/gangrill').then(() => {
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/gangrill';
+
+mongoose.connect(MONGO_URI).then(() => {
     console.log("Connected to MongoDB via Mongoose");
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }).catch(err => {
