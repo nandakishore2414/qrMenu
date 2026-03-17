@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('menu'); // 'menu' or 'categories'
@@ -24,8 +24,8 @@ export default function Dashboard() {
     const fetchData = async () => {
         try {
             const [catRes, menuRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/categories'),
-                axios.get('http://localhost:5000/api/menu')
+                api.get('/api/categories'),
+                api.get('/api/menu')
             ]);
             setCategories(catRes.data);
             setMenuItems(menuRes.data);
@@ -42,7 +42,7 @@ export default function Dashboard() {
     const handleAddCategory = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/admin/categories', { name: catName, description: catDesc }, axiosConfig);
+            await api.post('/api/admin/categories', { name: catName, description: catDesc }, axiosConfig);
             setCatName(''); setCatDesc('');
             fetchData();
         } catch (err) {
@@ -53,7 +53,7 @@ export default function Dashboard() {
     const handleDeleteCategory = async (id) => {
         if (!window.confirm("Delete category?")) return;
         try {
-            await axios.delete(`http://localhost:5000/api/admin/categories/${id}`, axiosConfig);
+            await api.delete(`/api/admin/categories/${id}`, axiosConfig);
             fetchData();
         } catch (err) {
             console.error(err);
@@ -72,7 +72,7 @@ export default function Dashboard() {
         if (menuImage) formData.append('image', menuImage);
 
         try {
-            await axios.post('http://localhost:5000/api/admin/menu', formData, axiosConfig);
+            await api.post('/api/admin/menu', formData, axiosConfig);
             setMenuName(''); setMenuDesc(''); setMenuPrice(''); setMenuImage(null);
             fetchData();
         } catch (err) {
@@ -83,7 +83,7 @@ export default function Dashboard() {
     const handleDeleteMenu = async (id) => {
         if (!window.confirm("Delete item?")) return;
         try {
-            await axios.delete(`http://localhost:5000/api/admin/menu/${id}`, axiosConfig);
+            await api.delete(`/api/admin/menu/${id}`, axiosConfig);
             fetchData();
         } catch (err) {
             console.error(err);
@@ -92,7 +92,7 @@ export default function Dashboard() {
 
     const toggleAvailability = async (id, currentVal) => {
         try {
-            await axios.patch(`http://localhost:5000/api/admin/menu/availability/${id}`, { available: !currentVal }, axiosConfig);
+            await api.patch(`/api/admin/menu/availability/${id}`, { available: !currentVal }, axiosConfig);
             fetchData();
         } catch (err) {
             console.error(err);

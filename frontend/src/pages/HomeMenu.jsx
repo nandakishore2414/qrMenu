@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Search, ShoppingBag, Plus, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 export default function HomeMenu() {
     const [categories, setCategories] = useState([]);
@@ -15,8 +15,8 @@ export default function HomeMenu() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/categories').then(res => setCategories(res.data)).catch(console.error);
-        axios.get('http://localhost:5000/api/menu').then(res => setMenuItems(res.data)).catch(console.error);
+        api.get('/api/categories').then(res => setCategories(res.data)).catch(console.error);
+        api.get('/api/menu').then(res => setMenuItems(res.data)).catch(console.error);
     }, []);
 
     const filteredItems = menuItems.filter(item => {
