@@ -12,6 +12,7 @@ app.use(cors({
         'http://localhost:5173',
         'http://localhost:3000',
         'https://gangrill-menu.vercel.app',
+        'https://qr-menu-cz5h100.vercel.app',
         /\.vercel\.app$/   // Allow any Vercel preview deployment
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
