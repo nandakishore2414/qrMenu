@@ -1,3 +1,3 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = 'https://qrmenu-1-5x8k.onrender.com';
 
 export default API_URL;
